@@ -124,7 +124,10 @@ func resourceArmServiceBusTopicAuthorizationRuleRead(d *schema.ResourceData, met
 	resGroup := id.ResourceGroup
 	namespaceName := id.Path["namespaces"]
 	topicName := id.Path["topics"]
-	name := id.Path["authorizationRules"]
+	name, ok := id.Path["authorizationRules"]
+	if !ok {
+		name, ok = id.Path["authorizationrules"]
+	}
 
 	resp, err := client.GetAuthorizationRule(ctx, resGroup, namespaceName, topicName, name)
 	if err != nil {
@@ -173,7 +176,10 @@ func resourceArmServiceBusTopicAuthorizationRuleDelete(d *schema.ResourceData, m
 	resGroup := id.ResourceGroup
 	namespaceName := id.Path["namespaces"]
 	topicName := id.Path["topics"]
-	name := id.Path["authorizationRules"]
+	name, ok := id.Path["authorizationRules"]
+	if !ok {
+		name, ok = id.Path["authorizationrules"]
+	}
 
 	if _, err = client.DeleteAuthorizationRule(ctx, resGroup, namespaceName, topicName, name); err != nil {
 		return fmt.Errorf("Error issuing Azure ARM delete request of ServiceBus Topic Authorization Rule %q (Resource Group %q): %+v", name, resGroup, err)
